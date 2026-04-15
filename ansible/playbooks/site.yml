@@ -4,6 +4,6 @@
   become: yes
   roles:
     - ec2_setup
-  tasks:
-    - import_playbook: install_docker.yml
-    - import_playbook: deploy_app.yml
+
+- import_playbook: install_docker.yml
+- import_playbook: deploy_log_analyzer.yml
