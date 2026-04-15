@@ -1,0 +1,9 @@
+---
+- name: Master Playbook
+  hosts: all
+  become: yes
+  roles:
+    - ec2_setup
+  tasks:
+    - import_playbook: install_docker.yml
+    - import_playbook: deploy_app.yml

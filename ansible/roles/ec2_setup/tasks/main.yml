@@ -1,0 +1,6 @@
+---
+- name: Update system and install base packages
+  yum:
+    name: "*"
+    state: latest
+  notify: Restart Server
