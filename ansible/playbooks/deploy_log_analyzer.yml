@@ -34,7 +34,13 @@
         state: started
         restart_policy: unless-stopped
         recreate: yes
+        command: >
+          streamlit run streamlit_app.py 
+          --server.port=8501 
+          --server.address=0.0.0.0
+          --server.enableCORS=false
+          --server.enableXsrfProtection=false
         ports:
-          - "80:{{ app_port }}"
+          - "80:8501"
         volumes:
           - /home/ec2-user/bedrock-log-analyzer-ui/.env:/app/.env:ro
