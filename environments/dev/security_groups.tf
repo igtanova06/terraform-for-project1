@@ -65,6 +65,16 @@ resource "aws_vpc_security_group_ingress_rule" "app_from_web" {
   ip_protocol                  = "tcp"
 }
 
+# QUAN TRỌNG: Cho phép máy EC2 tự nói chuyện với VPC Endpoints qua cổng 443
+resource "aws_vpc_security_group_ingress_rule" "allow_ssm_endpoint_https" {
+  for_each          = tomap({ "web" = aws_security_group.web.id, "app" = aws_security_group.app.id })
+  security_group_id = each.value
+  cidr_ipv4         = var.vpc_cidr
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+}
+
 resource "aws_vpc_security_group_egress_rule" "app_egress" {
   security_group_id = aws_security_group.app.id
   cidr_ipv4         = "0.0.0.0/0"
