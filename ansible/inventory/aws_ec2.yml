@@ -5,8 +5,6 @@ plugin: amazon.aws.aws_ec2
 
 filters:
   instance-state-name: running
-  "tag:Project": p1
-  "tag:Environment": dev
 
 # Hiển thị tag:Name trước, fallback sang private IP rồi instance-id
 hostnames:
