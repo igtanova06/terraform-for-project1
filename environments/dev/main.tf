@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_support   = true
@@ -121,4 +123,36 @@ resource "aws_route_table_association" "db" {
   count          = length(var.db_subnet_cidrs)
   subnet_id      = aws_subnet.db[count.index].id
   route_table_id = aws_route_table.db[count.index].id
+}
+
+
+
+# 1. Endpoint cho dịch vụ SSM (Điều khiển)
+resource "aws_vpc_endpoint" "ssm" {
+  vpc_id              = aws_vpc.main.id
+  service_name        = "com.amazonaws.${data.aws_region.current.name}.ssm"
+  vpc_endpoint_type   = "Interface"
+  security_group_ids  = [aws_security_group.app.id] # Dùng chung SG với app hoặc tạo mới
+  subnet_ids          = aws_subnet.private[*].id
+  private_dns_enabled = true
+}
+
+# 2. Endpoint cho SSM Messages (Để truyền dữ liệu shell)
+resource "aws_vpc_endpoint" "ssmmessages" {
+  vpc_id              = aws_vpc.main.id
+  service_name        = "com.amazonaws.${data.aws_region.current.name}.ssmmessages"
+  vpc_endpoint_type   = "Interface"
+  security_group_ids  = [aws_security_group.app.id]
+  subnet_ids          = aws_subnet.private[*].id
+  private_dns_enabled = true
+}
+
+# 3. Endpoint cho EC2 Messages (Để Agent báo cáo trạng thái)
+resource "aws_vpc_endpoint" "ec2messages" {
+  vpc_id              = aws_vpc.main.id
+  service_name        = "com.amazonaws.${data.aws_region.current.name}.ec2messages"
+  vpc_endpoint_type   = "Interface"
+  security_group_ids  = [aws_security_group.app.id]
+  subnet_ids          = aws_subnet.private[*].id
+  private_dns_enabled = true
 }
