@@ -92,7 +92,7 @@ resource "aws_lb_listener_rule" "qlsv" {
   condition {
     path_pattern {
       # Gộp lại thành 5 cái để AWS không la mắng nữa
-      values = ["/qlsv*", "/api/*", "/admin/*", "/assets/*", "/[sl]*"] 
+      values = ["/qlsv*", "/api/*", "/admin/*", "/assets/*", "/*.php"] 
     }
   }
 }
