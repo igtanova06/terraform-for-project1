@@ -70,7 +70,7 @@ st.sidebar.title("⚙️ Configuration")
 # --- AWS Settings ---
 st.sidebar.subheader("AWS Settings")
 aws_region = st.sidebar.text_input("AWS Region", value="ap-southeast-1")
-aws_profile = st.sidebar.text_input("AWS Profile", value="default")
+aws_profile = st.sidebar.text_input("AWS Profile", value="")
 
 # --- Log Group Selection (single group) ---
 st.sidebar.subheader("Log Source")

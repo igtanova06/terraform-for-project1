@@ -12,19 +12,24 @@ logger = logging.getLogger(__name__)
 class CloudWatchClient:
     """Client to interact with AWS CloudWatch Logs"""
     
-    def __init__(self, region: str = "us-east-1", profile: str = "default"):
+    def __init__(self, region: str = "us-east-1", profile: str = None):
         """
         Initialize CloudWatch client
         
         Args:
             region: AWS region
-            profile: AWS profile name
+            profile: AWS profile name (optional)
         """
         self.region = region
         self.profile = profile
         
         try:
-            session = boto3.Session(profile_name=profile, region_name=region)
+            # Nếu profile là 'default' hoặc None, hãy thử dùng default session (quan trọng khi chạy trên EC2)
+            if profile and profile != "default":
+                session = boto3.Session(profile_name=profile, region_name=region)
+            else:
+                session = boto3.Session(region_name=region)
+                
             self.client = session.client('logs')
             logger.info(f"CloudWatch client initialized for region {region}")
         except Exception as e:
